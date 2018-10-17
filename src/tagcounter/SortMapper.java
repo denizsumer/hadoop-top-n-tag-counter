@@ -13,10 +13,12 @@ import org.apache.hadoop.mapreduce.Mapper;
 
  @author Deniz
  */
-public class SortMapper extends Mapper<Text, IntWritable, IntWritable, Text> {
+public class SortMapper extends Mapper<LongWritable, Text, IntWritable, Text> {
 
     @Override
-    public void map(Text key, IntWritable value, Context context) throws IOException, InterruptedException {
-        context.write(value, key);
+    public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+        String line = value.toString();
+        String[] e = line.split("\t");
+        context.write(new IntWritable(Integer.parseInt(e[1])), new Text(e[0]));
     }
 }
