@@ -57,6 +57,7 @@ public class TagCounter {
         Job sortJob = new Job(conf, "TagSort");
         sortJob.setJarByClass(TagCounter.class);
         sortJob.setMapperClass(SortMapper.class);
+        sortJob.setReducerClass(SortReducer.class);
         sortJob.setNumReduceTasks(1);
         sortJob.setSortComparatorClass(IntDescComparator.class);
         sortJob.setOutputKeyClass(IntWritable.class);

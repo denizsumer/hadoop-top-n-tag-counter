@@ -24,7 +24,7 @@ public class SortReducer extends Reducer<IntWritable, Text, IntWritable, Text> {
 
     @Override
     public void reduce(IntWritable key, Iterable<Text> values, Context context) {
-        if (n < 5) {
+        if (n < 10) {
             try {
                 for (Text value : values) {
                     context.write(key, value);
