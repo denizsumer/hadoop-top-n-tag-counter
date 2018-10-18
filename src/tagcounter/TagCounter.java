@@ -21,39 +21,32 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 public class TagCounter {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Started");
         if (!count(args)) {
-            System.out.println("not count");
             System.exit(1);
         }
         if (!sort(args)) {
-            System.out.println("not sort");
             System.exit(1);
         }
     }
 
     public static boolean count(String args[]) throws Exception {
-        System.out.println("count started");
         Configuration conf = new Configuration();
-
         Job countJob = new Job(conf, "TagCount");
         countJob.setJarByClass(TagCounter.class);
         countJob.setMapperClass(CountMapper.class);
         countJob.setReducerClass(CountReducer.class);
+        countJob.setNumReduceTasks(10);
         countJob.setOutputKeyClass(Text.class);
         countJob.setOutputValueClass(LongWritable.class);
         countJob.setInputFormatClass(TextInputFormat.class);
         countJob.setOutputFormatClass(TextOutputFormat.class);
         FileInputFormat.addInputPath(countJob, new Path(args[0]));
         FileOutputFormat.setOutputPath(countJob, new Path(args[1]));
-        System.out.println("count end");
         return countJob.waitForCompletion(true);
     }
 
     public static boolean sort(String args[]) throws Exception {
-        System.out.println("sort started");
         Configuration conf = new Configuration();
-
         Job sortJob = new Job(conf, "TagSort");
         sortJob.setJarByClass(TagCounter.class);
         sortJob.setMapperClass(SortMapper.class);
@@ -66,7 +59,6 @@ public class TagCounter {
         sortJob.setOutputFormatClass(TextOutputFormat.class);
         FileInputFormat.addInputPath(sortJob, new Path(args[1]));
         FileOutputFormat.setOutputPath(sortJob, new Path(args[1], "sorted"));
-        System.out.println("sort end");
         return sortJob.waitForCompletion(true);
     }
 
