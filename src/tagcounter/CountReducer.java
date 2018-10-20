@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tagcounter;
-
 
 import java.io.IOException;
 
@@ -12,18 +6,32 @@ import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapreduce.*;
 
 /**
- *
- * @author 101527131
+ CountReducer is a reducer class to sum the key-value pairs
+
+ @author Deniz Sumer 101527131@student.swin.edu.au
+ @version 1.0.1842
  */
 public class CountReducer extends Reducer<Text, LongWritable, Text, LongWritable> {
-    
+
+    /**
+     Overridden method for reduce(). Sums values and writes to the output
+     context.
+
+     @param key tag
+     @param values count of a tag - always expected 1 from CountMapper context
+     @param context output context
+     @throws IOException
+     @throws InterruptedException
+     */
     @Override
-    public void reduce(Text key, Iterable<LongWritable> values, Context context) 
-    throws IOException, InterruptedException {
+    public void reduce(Text key, Iterable<LongWritable> values, Context context)
+            throws IOException, InterruptedException {
         int sum = 0;
         for (LongWritable val : values) {
+            // Sum the values
             sum += val.get();
         }
+        // Write Text object to key and counted sum as value
         context.write(key, new LongWritable(sum));
     }
 }

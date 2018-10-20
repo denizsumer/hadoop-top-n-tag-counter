@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tagcounter;
 
 import java.io.IOException;
@@ -10,28 +5,43 @@ import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapreduce.Reducer;
 
 /**
+ SortReducer is a reducer class to filter the the key-value pairs.
 
- @author Deniz
+ @author Deniz Sumer 101527131@student.swin.edu.au
+ @version 1.0.1842
  */
 public class SortReducer extends Reducer<IntWritable, Text, IntWritable, Text> {
 
     int n = 0;
 
+    /**
+     Overridden method for setup(). Sets the n number
+
+     @param context output context
+     */
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         n = 0;
     }
 
+    /**
+     Overridden method for reduce(). Filters top ten values.
+
+     @param key count of tag
+     @param values tag - always expected 1 value from CountMapper context
+     @param context output context
+     @throws IOException
+     @throws InterruptedException
+     */
     @Override
-    public void reduce(IntWritable key, Iterable<Text> values, Context context) {
+    public void reduce(IntWritable key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
+        // Run for the first 10 keys
         if (n < 10) {
-            try {
-                for (Text value : values) {
-                    context.write(key, value);
-                    n++;
-                }
-            }
-            catch (Exception e) {
+            for (Text value : values) {
+                // Write key value pairs to context
+                context.write(key, value);
+                // Increase the counter
+                n++;
             }
         }
     }
