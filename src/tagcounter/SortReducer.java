@@ -18,6 +18,8 @@ public class SortReducer extends Reducer<IntWritable, Text, IntWritable, Text> {
      Overridden method for setup(). Sets the n number
 
      @param context output context
+     @throws IOException
+     @throws InterruptedException
      */
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
